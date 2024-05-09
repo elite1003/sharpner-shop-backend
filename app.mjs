@@ -1,8 +1,13 @@
-import http from "http";
-import requestHandler from "./routes.mjs";
+import express from "express";
+const app = express();
 
-const server = http.createServer();
-server.on("request", requestHandler);
-server.listen(4000, () => {
+app.use((req, res, next) => {
+  console.log("inside first middleware");
+  next();
+});
+app.use("/", (req, res, next) => {
+  res.send({ key: "value" });
+});
+app.listen(4000, () => {
   console.log("Server running on port 4000");
 });
