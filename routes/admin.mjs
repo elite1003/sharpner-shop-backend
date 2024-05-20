@@ -1,16 +1,18 @@
 import express from "express";
+import path from "path";
+import rootDir from "../utils/root-dir.mjs";
 
 const router = express.Router();
 
+export const products = [];
+
 router.get("/add-product", (req, res, next) => {
-  res.send(
-    `<form action = "/admin/add-product" method = "POST"><label>name :</label><input type = "text" name= "name"/> 
-    <label>size :</label><input type = "text" name = "size"/><button type = "submit">Add Product</button></form>`
-  );
+  res.sendFile(path.join(rootDir, "views", "add-product.html"));
 });
+
 router.post("/add-product", (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/shop");
+  products.push({ title: req.body["product-name"] });
+  res.redirect("/");
 });
 
 export default router;
