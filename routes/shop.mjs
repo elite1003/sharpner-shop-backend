@@ -1,11 +1,8 @@
 import express from "express";
-import path from "path";
-import rootDir from "../utils/root-dir.mjs";
-import { products } from "./admin.mjs";
+import { getProducts } from "../controllers/addProducts.mjs";
+
 const router = express.Router();
-router.get("/", (req, res, next) => {
-  // console.log(products);
-  res.sendFile(path.join(rootDir, "views", "shop.html"));
-});
+
+router.get("/", getProducts);
 
 export default router;

@@ -7,9 +7,11 @@ import loginRoutes from "./routes/login.mjs";
 // import messageRoutes from "./routes/message.mjs";
 import contactUsRoutes from "./routes/contact-us.mjs";
 import successRoutes from "./routes/success.mjs";
+import { error404 } from "./controllers/error.mjs";
 import rootDir from "./utils/root-dir.mjs";
 
 const app = express();
+
 app.use(express.static(path.join(rootDir, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -20,9 +22,8 @@ app.use("/success", successRoutes);
 app.use("/", shopRoutes);
 // app.use("/", messageRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(rootDir, "views", "page-not-found.html"));
-});
+app.use(error404);
+
 app.listen(4000, () => {
   console.log("Server running on port 4000");
 });

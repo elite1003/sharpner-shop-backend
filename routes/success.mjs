@@ -1,9 +1,8 @@
 import express from "express";
-import path from "path";
-import rootDir from "../utils/root-dir.mjs";
+import { getSuccess } from "../controllers/contactUs.mjs";
+
 const router = express.Router();
-router.get("/", (req, res, next) => {
-  res.sendFile(path.join(rootDir, "views", "success.html"));
-});
+
+router.get("/", getSuccess);
 
 export default router;
