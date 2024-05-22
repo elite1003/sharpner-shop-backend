@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import adminRoutes from "./routes/admin.mjs";
 import shopRoutes from "./routes/shop.mjs";
 import loginRoutes from "./routes/login.mjs";
-// import messageRoutes from "./routes/message.mjs";
+import messageRoutes from "./routes/message.mjs";
 import contactUsRoutes from "./routes/contact-us.mjs";
 import successRoutes from "./routes/success.mjs";
 import { error404 } from "./controllers/error.mjs";

@@ -1,32 +1,25 @@
 import path from "path";
 import rootDir from "../utils/root-dir.mjs";
-import fs from "fs/promises";
+import Message from "../models/message.mjs";
 
 export const getSendMessageForm = (req, res, next) => {
   res.sendFile(path.join(rootDir, "views", "send-message.html"));
 };
 
 export const getMessages = (req, res, next) => {
-  try {
-    (async () => {
-      const data = await fs.readFile("message.txt", "utf-8");
-      res.status(200).send(JSON.stringify(data));
-    })();
-  } catch (error) {
-    console.log(error);
-  }
+  Message.getMessages((messages) =>
+    res.status(200).send(JSON.stringify(messages))
+  );
 };
 
 export const postMessages = (req, res, next) => {
-  const message = `${req.body.userName}: ${req.body.message} \n`;
-  try {
-    (async () => {
-      await fs.appendFile("message.txt", message);
+  Message.saveMessages(req.body, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
       res.status(200).send({
         ok: true,
       });
-    })();
-  } catch (error) {
-    console.log(error);
-  }
+    }
+  });
 };
