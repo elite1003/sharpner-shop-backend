@@ -1,14 +1,9 @@
 import express from "express";
-import {
-  getSendMessageForm,
-  getMessages,
-  postMessages,
-} from "../controllers/message.mjs";
+import { getMessages, postMessages } from "../controllers/message.mjs";
 
 const router = express.Router();
 
-router.get("/", getSendMessageForm);
-router.get("/message", getMessages);
-router.post("/message", postMessages);
+router.get("/", getMessages);
+router.post("/", postMessages);
 
 export default router;

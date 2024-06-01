@@ -1,19 +1,12 @@
-import path from "path";
-import rootDir from "../utils/root-dir.mjs";
 import Message from "../models/message.mjs";
 
-export const getSendMessageForm = (req, res, next) => {
-  res.sendFile(path.join(rootDir, "views", "send-message.html"));
-};
-
 export const getMessages = (req, res, next) => {
-  Message.getMessages((messages) =>
-    res.status(200).send(JSON.stringify(messages))
-  );
+  Message.getMessages().then((messages) => res.status(200).json(messages));
 };
 
 export const postMessages = (req, res, next) => {
-  Message.saveMessages(req.body, (err) => {
+  const message = new Message(req.body.userName, req.body.message);
+  message.saveMessages((err) => {
     if (err) {
       console.log(err);
     } else {

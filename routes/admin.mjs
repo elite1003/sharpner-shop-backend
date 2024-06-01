@@ -1,9 +1,9 @@
 import express from "express";
-import { getAddProduct, postAddProduct } from "../controllers/addProducts.mjs";
+import { postAddProduct } from "../controllers/admin.mjs";
 
 const router = express.Router();
 
-router.get("/add-product", getAddProduct);
 router.post("/add-product", postAddProduct);
-
+router.delete("/product/:productId");
+router.put("/product/:productId");
 export default router;

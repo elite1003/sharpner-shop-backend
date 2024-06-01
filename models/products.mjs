@@ -1,36 +1,28 @@
-import fs from "node:fs/promises";
+// import fs from "node:fs/promises";
+import mongoose from "mongoose";
 
-class Product {
-  constructor(t) {
-    this.title = t;
-  }
-  saveProduct(cb) {
-    let products = [];
-    fs.readFile("products.json", "utf-8")
-      .then((res) => {
-        products = JSON.parse(res);
-        products.push(this);
-      })
-      .catch((err) => {
-        products.push(this);
-      })
-      .finally(() => {
-        fs.writeFile("products.json", JSON.stringify(products))
-          .then(() => {
-            cb();
-          })
-          .catch((err) => console.log(err));
-      });
-  }
-  static async fetchAllProducts(cb) {
-    return fs
-      .readFile("products.json", "utf-8")
-      .then((res) => {
-        return JSON.parse(res);
-      })
-      .catch((err) => {
-        return [];
-      });
-  }
-}
+// Create the product schema
+const productSchema = new mongoose.Schema({
+  productName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  imageURL: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+});
+
+// Create the product model
+const Product = mongoose.model("Product", productSchema);
 export default Product;
