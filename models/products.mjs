@@ -1,4 +1,3 @@
-// import fs from "node:fs/promises";
 import mongoose from "mongoose";
 
 // Create the product schema
@@ -26,3 +25,14 @@ const productSchema = new mongoose.Schema({
 // Create the product model
 const Product = mongoose.model("Product", productSchema);
 export default Product;
+
+export const updateProductById = async (productId, updatedData) => {
+  return await Product.findByIdAndUpdate(
+    productId, // The ID of the product to update
+    updatedData // The updated data
+  );
+};
+
+export const deleteProductById = async (productId) => {
+  return await Product.findByIdAndDelete(productId);
+};
