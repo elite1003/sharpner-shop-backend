@@ -1,38 +1,68 @@
-import mongoose from "mongoose";
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../utils/database.mjs";
 
-// Create the product schema
-const productSchema = new mongoose.Schema({
-  productName: {
-    type: String,
-    required: true,
-    trim: true,
+class Product extends Model {}
+Product.init(
+  {
+    productName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+    imageURL: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   },
-  price: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  imageURL: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    sequelize,
+    modelName: "Product",
+  }
+);
 
-// Create the product model
-const Product = mongoose.model("Product", productSchema);
+// Export the model
 export default Product;
 
+// Update a product by ID
 export const updateProductById = async (productId, updatedData) => {
-  return await Product.findByIdAndUpdate(
-    productId, // The ID of the product to update
-    updatedData // The updated data
-  );
+  try {
+    const [updatedRows] = await Product.update(updatedData, {
+      where: { id: productId },
+    });
+    console.log(updatedRows);
+    return updatedRows > 0 ? await Product.findByPk(productId) : null;
+  } catch (error) {
+    throw error;
+  }
 };
 
+// Delete a product by ID
 export const deleteProductById = async (productId) => {
-  return await Product.findByIdAndDelete(productId);
+  try {
+    const deletedRows = await Product.destroy({
+      where: { id: productId },
+    });
+    return deletedRows > 0;
+  } catch (error) {
+    throw error;
+  }
 };

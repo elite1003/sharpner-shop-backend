@@ -5,28 +5,24 @@ import Product, {
 
 export const postProduct = async (req, res, next) => {
   const { productName, imageURL, description, price } = req.body.product;
-  try {
-    const newProduct = new Product({
-      productName,
-      imageURL,
-      description,
-      price,
-    });
-    await newProduct.save();
-    res.status(201).json({ _id: newProduct._id });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+  Product.create({
+    productName,
+    imageURL,
+    description,
+    price,
+  })
+    .then((newProduct) => res.status(201).json({ id: newProduct.id }))
+    .catch((err) => res.status(400).json({ message: err.message }));
 };
 
 export const deleteProduct = async (req, res, next) => {
   const { productId } = req.params;
   try {
-    const product = deleteProductById(productId);
-    if (!product) {
+    const isProductDeleted = deleteProductById(productId);
+    if (!isProductDeleted) {
       return res.status(404).send();
     }
-    res.status(200).send(product);
+    res.status(200).send();
   } catch (error) {
     res.status(500).send(error);
   }
@@ -42,6 +38,6 @@ export const putProduct = async (req, res, next) => {
     }
     res.status(200).json({ updatedProduct });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ error });
   }
 };

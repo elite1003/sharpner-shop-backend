@@ -7,29 +7,28 @@ export const postSignUp = async (req, res, next) => {
   const password = req.body.userPassword;
   try {
     // Check if the user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-    // Create a new user
-    const newUser = new User({
+    // Create a new user and save into database
+    const newUser = await User.create({
       email,
       password,
     });
-
-    // Save the user to the database
-    const savedUser = await newUser.save();
-    res.status(201).json({ email: savedUser.email, _id: savedUser._id });
+    console.log(newUser);
+    res.status(201).json({ email: newUser.email, id: newUser.id });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const postLogin = async (req, res, next) => {
   const email = req.body.userEmail;
   const password = req.body.userPassword;
   try {
     // Check if the user exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
