@@ -48,7 +48,6 @@ export const updateProductById = async (productId, updatedData) => {
     const [updatedRows] = await Product.update(updatedData, {
       where: { id: productId },
     });
-    console.log(updatedRows);
     return updatedRows > 0 ? await Product.findByPk(productId) : null;
   } catch (error) {
     throw error;
