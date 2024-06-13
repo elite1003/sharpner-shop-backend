@@ -1,5 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
+import User from "./models/user.mjs";
+import Cart from "./models/cart.mjs";
+import Product from "./models/products.mjs";
+import CartProduct from "./models/cart-product.mjs";
 import path from "path";
 import express from "express";
 import cors from "cors";
@@ -15,6 +19,7 @@ import { verifyToken } from "./utils/jwt.mjs";
 import sequelize from "./utils/database.mjs";
 
 const app = express();
+
 app.use(cors());
 app.use(express.static(path.join(rootDir, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,6 +31,10 @@ app.use("/shop", verifyToken, shopRoutes);
 app.use("/auth", authRoutes);
 
 app.use(error404);
+User.hasOne(Cart, { foreignKey: "userId" });
+Cart.belongsTo(User, { foreignKey: "userId" });
+Cart.belongsToMany(Product, { through: CartProduct, foreignKey: "cartId" });
+Product.belongsToMany(Cart, { through: CartProduct, foreignKey: "productId" });
 sequelize
   .sync()
   .then(() => {
