@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-
+import User from "../models/user.mjs";
 export const generateToken = (user) => {
   const secretKey = process.env.JWT_SECRET;
   return jwt.sign(
@@ -22,11 +22,12 @@ export const verifyToken = (req, res, next) => {
       .json({ message: "Authorization token is required." });
   }
 
-  jwt.verify(token, secretKey, (err, decoded) => {
+  jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
       return res.status(403).json({ message: "Invalid token." });
     }
-    req.user = decoded;
+    const user = await User.findByPk(decoded.id);
+    req.user = user;
     next();
   });
 };

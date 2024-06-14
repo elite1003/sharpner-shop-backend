@@ -1,9 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
+//models
 import User from "./models/user.mjs";
 import Cart from "./models/cart.mjs";
 import Product from "./models/products.mjs";
 import CartProduct from "./models/cart-product.mjs";
+
 import path from "path";
 import express from "express";
 import cors from "cors";
@@ -31,10 +33,21 @@ app.use("/shop", verifyToken, shopRoutes);
 app.use("/auth", authRoutes);
 
 app.use(error404);
+
+//associations
+User.hasMany(Product, { foreignKey: "userId" });
+Product.belongsTo(User, {
+  foreignKey: "userId",
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
 User.hasOne(Cart, { foreignKey: "userId" });
 Cart.belongsTo(User, { foreignKey: "userId" });
+
 Cart.belongsToMany(Product, { through: CartProduct, foreignKey: "cartId" });
 Product.belongsToMany(Cart, { through: CartProduct, foreignKey: "productId" });
+
 sequelize
   .sync()
   .then(() => {

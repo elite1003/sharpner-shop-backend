@@ -16,7 +16,7 @@ export const postSignUp = async (req, res, next) => {
       email,
       password,
     });
-    console.log(newUser);
+    await newUser.createCart();
     res.status(201).json({ email: newUser.email, id: newUser.id });
   } catch (error) {
     res.status(500).json({ message: error.message });

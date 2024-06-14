@@ -1,14 +1,19 @@
 import express from "express";
 import { getProducts } from "../controllers/shop.mjs";
-import { postCart, getCart } from "../controllers/cart.mjs";
+import {
+  postCart,
+  getCart,
+  deleteProductFromCart,
+} from "../controllers/cart.mjs";
 
 const router = express.Router();
 
 router.get("/products", getProducts);
-router.post("/cart", postCart);
-router.get("/cart", getCart);
 
 //cart
+router.post("/cart", postCart);
+router.get("/cart", getCart);
+router.delete("/cart/:productId", deleteProductFromCart);
 //checkout
 
 export default router;

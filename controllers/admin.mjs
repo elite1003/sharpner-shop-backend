@@ -1,16 +1,9 @@
-import Product, {
-  updateProductById,
-  deleteProductById,
-} from "../models/products.mjs";
+import { updateProductById, deleteProductById } from "../models/products.mjs";
 
 export const postProduct = async (req, res, next) => {
-  const { productName, imageURL, description, price } = req.body.product;
-  Product.create({
-    productName,
-    imageURL,
-    description,
-    price,
-  })
+  const { product } = req.body;
+  req.user
+    .createProduct(product)
     .then((newProduct) => res.status(201).json({ id: newProduct.id }))
     .catch((err) => res.status(400).json({ message: err.message }));
 };
