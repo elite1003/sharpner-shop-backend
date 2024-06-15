@@ -1,23 +1,23 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database.mjs";
-import Cart from "./cart.mjs";
+import Order from "./order.mjs";
 import Product from "./products.mjs";
 
-// CartProduct join table for many-to-many relationship
-class CartProduct extends Model {}
-CartProduct.init(
+// OrderProduct join table for many-to-many relationship
+class OrderProduct extends Model {}
+OrderProduct.init(
   {
-    cartId: {
+    orderId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: Cart,
+        model: Order,
         key: "id",
       },
     },
     productId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: Product,
         key: "id",
@@ -25,7 +25,7 @@ CartProduct.init(
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       validate: {
         min: 1,
       },
@@ -33,9 +33,9 @@ CartProduct.init(
   },
   {
     sequelize,
-    modelName: "CartProduct",
+    modelName: "OrderProduct",
     timestamps: false,
   }
 );
 
-export default CartProduct;
+export default OrderProduct;

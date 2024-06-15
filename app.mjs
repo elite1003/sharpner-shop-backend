@@ -19,6 +19,8 @@ import { error404 } from "./controllers/error.mjs";
 import rootDir from "./utils/root-dir.mjs";
 import { verifyToken } from "./utils/jwt.mjs";
 import sequelize from "./utils/database.mjs";
+import Order from "./models/order.mjs";
+import OrderProduct from "./models/order-product.mjs";
 
 const app = express();
 
@@ -35,6 +37,7 @@ app.use("/auth", authRoutes);
 app.use(error404);
 
 //associations
+
 User.hasMany(Product, { foreignKey: "userId" });
 Product.belongsTo(User, {
   foreignKey: "userId",
@@ -47,6 +50,19 @@ Cart.belongsTo(User, { foreignKey: "userId" });
 
 Cart.belongsToMany(Product, { through: CartProduct, foreignKey: "cartId" });
 Product.belongsToMany(Cart, { through: CartProduct, foreignKey: "productId" });
+
+User.hasMany(Order, { foreignKey: "userId" });
+Order.belongsTo(User, {
+  foreignKey: "userId",
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
+Order.belongsToMany(Product, { through: OrderProduct, foreignKey: "orderId" });
+Product.belongsToMany(Order, {
+  through: OrderProduct,
+  foreignKey: "productId",
+});
 
 sequelize
   .sync()

@@ -5,6 +5,7 @@ import {
   getCart,
   deleteProductFromCart,
 } from "../controllers/cart.mjs";
+import { getOrder, postOrder } from "../controllers/order.mjs";
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.get("/products", getProducts);
 router.post("/cart", postCart);
 router.get("/cart", getCart);
 router.delete("/cart/:productId", deleteProductFromCart);
-//checkout
-
+//order
+router.post("/order", postOrder);
+router.get("/order", getOrder);
 export default router;
