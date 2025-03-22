@@ -1,26 +1,29 @@
 import dotenv from "dotenv";
 dotenv.config();
-//models
-import User from "./models/user.mjs";
-import Cart from "./models/cart.mjs";
-import Product from "./models/products.mjs";
-import CartProduct from "./models/cart-product.mjs";
 
 import path from "path";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import rootDir from "./utils/root-dir.mjs";
+import { verifyToken } from "./utils/jwt.mjs";
+import sequelize from "./utils/database.mjs";
+
+//models
+import User from "./models/user.mjs";
+import Cart from "./models/cart.mjs";
+import Product from "./models/products.mjs";
+import CartProduct from "./models/cart-product.mjs";
+import Order from "./models/order.mjs";
+import OrderProduct from "./models/order-product.mjs";
+
+//routes
 import adminRoutes from "./routes/admin.mjs";
 import shopRoutes from "./routes/shop.mjs";
 import messageRoutes from "./routes/message.mjs";
 import contactUsRoutes from "./routes/contact-us.mjs";
 import authRoutes from "./routes/auth.mjs";
 import { error404 } from "./controllers/error.mjs";
-import rootDir from "./utils/root-dir.mjs";
-import { verifyToken } from "./utils/jwt.mjs";
-import sequelize from "./utils/database.mjs";
-import Order from "./models/order.mjs";
-import OrderProduct from "./models/order-product.mjs";
 
 const app = express();
 
